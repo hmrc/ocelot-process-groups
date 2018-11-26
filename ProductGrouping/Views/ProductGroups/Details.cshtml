@@ -5,39 +5,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h4 class="text-muted">Product Grouping Details</h4>
 
 <div>
-    <h4>ProductGroup</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductReference)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductReference)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductOwner)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductOwner)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Group)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Group)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Site)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Site)
-        </dd>
-    </dl>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.ProductReference)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ProductReference)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.ProductOwner)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ProductOwner)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Group)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Group)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Site)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Site)
+                </td>
+            </tr>            
+        </tbody>
+    </table>
 </div>
+
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>
