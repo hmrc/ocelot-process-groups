@@ -49,21 +49,19 @@ namespace ProductGrouping.Repositories
                                  .ToListAsync();
         }
 
-        public async Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending)
+        public IQueryable<ProductGroup> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending)
         {
             if (ascending)
             {
-                return await _context.ProductGroups
-                                 .Where(where)
-                                 .OrderBy(orderBy)
-                                 .ToListAsync();
+                return _context.ProductGroups
+                               .Where(where)
+                               .OrderBy(orderBy);
             }
             else
             {
-                return await _context.ProductGroups
-                                 .Where(where)
-                                 .OrderByDescending(orderBy)
-                                 .ToListAsync();
+                return _context.ProductGroups
+                               .Where(where)
+                               .OrderByDescending(orderBy);
             }            
         }
 

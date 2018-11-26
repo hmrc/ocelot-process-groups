@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
+using ProductGrouping.Views.Helpers;
 using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ProductGrouping.Controllers
@@ -21,9 +23,35 @@ namespace ProductGrouping.Controllers
         }
 
         // GET: ProductGroups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page)
         {
-            return View(await _productGroupRepository.GetMany());
+            Expression<Func<ProductGroup, bool>> where = p => p.Id != null;
+            Expression<Func<ProductGroup, string>> orderby = p => p.ProductReference;
+            var ascending = true;
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                where = p => p.ProductReference.ToUpper().Contains(searchString.ToUpper()) ||
+                             p.ProductOwner.ToUpper().Contains(searchString.ToUpper()) ||
+                             p.Site.ToUpper().Contains(searchString.ToUpper()) ||
+                             p.Group.ToUpper().Contains(searchString.ToUpper());
+            }
+
+            int pageSize = 2;
+            var productGroupings = _productGroupRepository.GetMany(where, orderby, ascending);
+
+            return View(await PaginatedList<ProductGroup>.CreateAsync(productGroupings.AsNoTracking(), page ?? 1, pageSize));            
         }
 
         // GET: ProductGroups/Details/5

@@ -17,7 +17,7 @@ namespace ProductGrouping.Interfaces
 
         Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where);
 
-        Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending);
+        IQueryable<ProductGroup> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending);
 
         Task Post(ProductGroup productGroup);
 
