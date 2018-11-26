@@ -18,6 +18,7 @@ namespace ProductGrouping.Models
         [Required(ErrorMessage = "Product Owner Required")]
         [MinLength(7, ErrorMessage = "Product Owner Too Short")]
         [MaxLength(7, ErrorMessage = "Product Owner Too Long")]
+        [RegularExpression("^\\d{7}", ErrorMessage = "Product Owner must a PID eg. 1111111")]
         public string ProductOwner { get; set; }
 
         [DisplayName("Group")]

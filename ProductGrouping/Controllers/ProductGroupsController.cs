@@ -48,7 +48,7 @@ namespace ProductGrouping.Controllers
                              p.Group.ToUpper().Contains(searchString.ToUpper());
             }
 
-            int pageSize = 2;
+            int pageSize = 20;
             var productGroupings = _productGroupRepository.GetMany(where, orderby, ascending);
 
             return View(await PaginatedList<ProductGroup>.CreateAsync(productGroupings.AsNoTracking(), page ?? 1, pageSize));            
