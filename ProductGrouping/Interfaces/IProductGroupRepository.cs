@@ -17,13 +17,13 @@ namespace ProductGrouping.Interfaces
 
         Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where);
 
-        Task<IQueryable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending);
+        Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending);
 
-        Task<bool> Post(ProductGroup productGroup);
+        Task Post(ProductGroup productGroup);
 
-        Task<bool> Put(ProductGroup productGroup);
+        Task Put(ProductGroup productGroup);
 
-        Task<bool> Delete(ProductGroup productGroup);
+        Task Delete(ProductGroup productGroup);
 
         Task<bool> Exists(Guid id);
     }

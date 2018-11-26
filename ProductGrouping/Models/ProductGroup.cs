@@ -16,6 +16,7 @@ namespace ProductGrouping.Models
 
         [DisplayName("Product Owner")]
         [Required(ErrorMessage = "Product Owner Required")]
+        [MinLength(7, ErrorMessage = "Product Owner Too Short")]
         [MaxLength(7, ErrorMessage = "Product Owner Too Long")]
         public string ProductOwner { get; set; }
 
