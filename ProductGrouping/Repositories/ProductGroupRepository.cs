@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
 using System;
@@ -12,10 +13,13 @@ namespace ProductGrouping.Repositories
     public class ProductGroupRepository: IProductGroupRepository
     {
         private readonly Context _context;
+        private readonly ILogger<ProductGroupRepository> _logger;
 
-        public ProductGroupRepository(Context context)
+        public ProductGroupRepository(Context context,
+                                      ILogger<ProductGroupRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public Task<ProductGroup> Get(Guid? id)
