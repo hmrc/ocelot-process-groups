@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
+using ProductGrouping.Repositories;
 using System;
 
 namespace ProductGrouping
@@ -29,6 +31,8 @@ namespace ProductGrouping
             services.AddAuthentication(HttpSysDefaults.AuthenticationScheme);
 
             services.AddMvc();
+
+            services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
 
             services.Configure<IISOptions>(c =>
             {
