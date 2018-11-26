@@ -11,5 +11,7 @@ namespace ProductGrouping.Models
         public Context(DbContextOptions<Context> options)
         : base(options)
         { }
+
+        public DbSet<ProductGroup> ProductGroups { get; set; }
     }
 }
