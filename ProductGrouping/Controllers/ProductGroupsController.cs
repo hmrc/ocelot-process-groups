@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProductGrouping.Controllers.Helpers;
 using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
-using ProductGrouping.Views.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
