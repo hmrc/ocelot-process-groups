@@ -34,6 +34,7 @@ namespace ProductGrouping
 
             services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ILegacyFileRepository, LegacyFileRepository>();
 
             services.Configure<IISOptions>(c =>
             {
