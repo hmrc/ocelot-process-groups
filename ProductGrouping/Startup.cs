@@ -33,6 +33,7 @@ namespace ProductGrouping
             services.AddMvc();
 
             services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
 
             services.Configure<IISOptions>(c =>
             {

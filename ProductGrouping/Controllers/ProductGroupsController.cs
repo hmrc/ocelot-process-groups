@@ -14,12 +14,15 @@ namespace ProductGrouping.Controllers
     {
         private readonly ILogger<ProductGroupsController> _logger;
         private readonly IProductGroupRepository _productGroupRepository;
+        private readonly IAuthRepository _authRepository;
 
         public ProductGroupsController(ILogger<ProductGroupsController> logger,
-                                       IProductGroupRepository productGroupRepository)
+                                       IProductGroupRepository productGroupRepository,
+                                       IAuthRepository authRepository)
         {
             _logger = logger;
             _productGroupRepository = productGroupRepository;
+            _authRepository = authRepository;
         }
 
         // GET: ProductGroups
@@ -85,6 +88,13 @@ namespace ProductGrouping.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProductReference,ProductOwner,Group,Site")] ProductGroup productGroup)
         {
+            if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
+            {
+                ViewBag.UserMessage = "You are not authorised to create a product Group. Please contact your local customer relationship manager.";
+
+                return View(productGroup);
+            }
+
             if (ModelState.IsValid)
             {
                 productGroup.Id = Guid.NewGuid();
@@ -125,6 +135,12 @@ namespace ProductGrouping.Controllers
             if (id != productGroup.Id)
             {
                 return NotFound();
+            }
+            else if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
+            {
+                ViewBag.UserMessage = "You are not authorised to edit this product Group. Please contact your local customer relationship manager.";
+
+                return View(productGroup);
             }
 
             if (ModelState.IsValid)
@@ -175,6 +191,13 @@ namespace ProductGrouping.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var productGroup = await _productGroupRepository.Get(id);
+
+            if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
+            {
+                ViewBag.UserMessage = "You are not authorised to delete this product Group. Please contact your local customer relationship manager.";
+
+                return View(productGroup);
+            }
 
             await _productGroupRepository.Delete(productGroup);
 
