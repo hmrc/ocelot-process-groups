@@ -31,8 +31,8 @@ namespace ProductGrouping.Repositories
         public async Task<ProductGroup> Get(string productReference)
         {
             return await _context.ProductGroups
-                           .Where(p => p.ProductReference == productReference)
-                           .FirstOrDefaultAsync();
+                                 .Where(p => p.ProductReference == productReference)
+                                 .FirstOrDefaultAsync();
                         
         }
 

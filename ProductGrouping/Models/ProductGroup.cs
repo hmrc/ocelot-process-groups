@@ -23,7 +23,7 @@ namespace ProductGrouping.Models
 
         [DisplayName("Group")]
         [Required(ErrorMessage = "Group Required")]
-        [MaxLength(100, ErrorMessage = "Product Owner Too Long")]
+        [MaxLength(100, ErrorMessage = "Group Too Long")]
         public string Group { get; set; }
 
         [DisplayName("Site")]
