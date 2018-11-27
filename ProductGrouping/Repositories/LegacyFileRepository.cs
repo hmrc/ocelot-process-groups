@@ -14,16 +14,20 @@ namespace ProductGrouping.Repositories
     public class LegacyFileRepository: ILegacyFileRepository
     {
         private readonly ILogger<LegacyFileRepository> _logger;
+        private readonly IProductGroupRepository _productGroupRepository;
 
-        public LegacyFileRepository(ILogger<LegacyFileRepository> logger)
+        public LegacyFileRepository(ILogger<LegacyFileRepository> logger,
+                                    IProductGroupRepository productGroupRepository)
         {
             _logger = logger;
+            _productGroupRepository = productGroupRepository;
         }
 
-        public async Task Publish(IEnumerable<ProductGroup> productGroups)
+        public async Task Publish()
         {
             var publishFile = $"{Environment.GetEnvironmentVariable("LegacyProductGroupingLocation", EnvironmentVariableTarget.Machine)}ProductGrouping.xml";
-            
+            var productGroups = await _productGroupRepository.GetMany();
+
             XElement export = new XElement("dataroot",
                                         productGroups.Select(p => new XElement("ProductGrouping",
                                                                              new XElement("ref", p.ProductReference),

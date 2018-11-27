@@ -6,6 +6,6 @@ namespace ProductGrouping.Interfaces
 {
     public interface ILegacyFileRepository
     {
-        Task Publish(IEnumerable<ProductGroup> productGroups);
+        Task Publish();
     }
 }

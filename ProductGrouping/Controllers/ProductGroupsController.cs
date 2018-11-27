@@ -15,14 +15,17 @@ namespace ProductGrouping.Controllers
         private readonly ILogger<ProductGroupsController> _logger;
         private readonly IProductGroupRepository _productGroupRepository;
         private readonly IAuthRepository _authRepository;
+        private readonly ILegacyFileRepository _legacyFileRepository;
 
         public ProductGroupsController(ILogger<ProductGroupsController> logger,
                                        IProductGroupRepository productGroupRepository,
-                                       IAuthRepository authRepository)
+                                       IAuthRepository authRepository,
+                                       ILegacyFileRepository legacyFileRepository)
         {
             _logger = logger;
             _productGroupRepository = productGroupRepository;
             _authRepository = authRepository;
+            _legacyFileRepository = legacyFileRepository;
         }
 
         // GET: ProductGroups
@@ -100,6 +103,7 @@ namespace ProductGrouping.Controllers
                 productGroup.Id = Guid.NewGuid();
 
                 await _productGroupRepository.Post(productGroup);
+                await _legacyFileRepository.Publish();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -147,7 +151,7 @@ namespace ProductGrouping.Controllers
             {
                 try
                 {
-                    await _productGroupRepository.Put(productGroup);
+                    await _productGroupRepository.Put(productGroup);                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -160,6 +164,8 @@ namespace ProductGrouping.Controllers
                         throw;
                     }
                 }
+
+                await _legacyFileRepository.Publish();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -200,6 +206,7 @@ namespace ProductGrouping.Controllers
             }
 
             await _productGroupRepository.Delete(productGroup);
+            await _legacyFileRepository.Publish();
 
             return RedirectToAction(nameof(Index));
         }
