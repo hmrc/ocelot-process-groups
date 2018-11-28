@@ -153,7 +153,7 @@ namespace ProductGrouping.Controllers
                 {
                     await _productGroupRepository.Put(productGroup);                    
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!await _productGroupRepository.Exists(productGroup.Id))
                     {
@@ -161,7 +161,8 @@ namespace ProductGrouping.Controllers
                     }
                     else
                     {
-                        throw;
+                        _logger.LogCritical(500, ex.Message, ex);
+                        return StatusCode(500);
                     }
                 }
 
