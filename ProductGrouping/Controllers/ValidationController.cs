@@ -22,13 +22,13 @@ namespace ProductGrouping.Controllers
         {
             var result = await _productGroupRepository.GetMany(p => p.ProductReference == productReference);
 
-            if (result.Count() == 0)
+            if (result.Any())
             {
-                return Content("true");
+                return Content("false");
             }
             else
             {
-                return Content("false");
+                return Content("true");
             }
         }
     }
