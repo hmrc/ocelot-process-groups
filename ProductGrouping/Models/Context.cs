@@ -13,5 +13,12 @@ namespace ProductGrouping.Models
         { }
 
         public DbSet<ProductGroup> ProductGroups { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductGroup>()
+                        .HasIndex(p => p.ProductReference)
+                        .IsUnique();
+        }
     }
 }
