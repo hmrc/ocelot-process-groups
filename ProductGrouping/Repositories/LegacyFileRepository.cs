@@ -25,7 +25,7 @@ namespace ProductGrouping.Repositories
 
         public async Task Publish()
         {
-            var publishFile = $"{Environment.GetEnvironmentVariable("LegacyProductGroupingLocation", EnvironmentVariableTarget.Machine)}ProductGrouping.xml";
+            var publishFile = $"{Environment.GetEnvironmentVariable("LegacyProductGroupingLocation", EnvironmentVariableTarget.Machine)}";
             var productGroups = await _productGroupRepository.GetMany();
 
             XElement export = new XElement("dataroot",
