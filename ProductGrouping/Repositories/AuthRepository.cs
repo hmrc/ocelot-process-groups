@@ -21,35 +21,44 @@ namespace ProductGrouping.Repositories
 
         private bool IsAuthedRoleAsync(string pid)
         {
-            var file = Environment.GetEnvironmentVariable("StaffList", EnvironmentVariableTarget.Machine);
-            XmlDocument xml = new XmlDocument();
-            string textFromPage;
-
-            WebClient web = new WebClient
+            try
             {
-                Credentials = CredentialCache.DefaultCredentials
-            };
+                var file = Environment.GetEnvironmentVariable("StaffList", EnvironmentVariableTarget.Machine);
+                XmlDocument xml = new XmlDocument();
+                string textFromPage;
 
-            Stream stream = web.OpenRead(file);
+                WebClient web = new WebClient
+                {
+                    Credentials = CredentialCache.DefaultCredentials
+                };
 
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                textFromPage = reader.ReadToEnd();
+                Stream stream = web.OpenRead(file);
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    textFromPage = reader.ReadToEnd();
+                }
+
+                xml.LoadXml(textFromPage);
+
+                var nodelocation = $"dataroot/Entry[PID='{pid}']";
+                var entry = xml.SelectSingleNode(nodelocation);
+
+                if (entry == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
-
-            xml.LoadXml(textFromPage);
-
-            var nodelocation = $"dataroot/Entry[PID='{pid}']";
-            var entry = xml.SelectSingleNode(nodelocation);
-
-            if (entry == null)
+            catch(Exception ex)
             {
+                _logger.LogCritical(500, ex.Message, ex);
+
                 return false;
-            }
-            else
-            {
-                return true;
-            }
+            }            
         }
     }
 }

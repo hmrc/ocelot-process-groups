@@ -55,9 +55,19 @@ namespace ProductGrouping.Controllers
             }
 
             int pageSize = 20;
-            var productGroupings = _productGroupRepository.GetMany(where, orderby, ascending);
+       
+            try
+            {
+                var productGroupings = _productGroupRepository.GetMany(where, orderby, ascending);
 
-            return View(await PaginatedList<ProductGroup>.CreateAsync(productGroupings.AsNoTracking(), page ?? 1, pageSize));            
+                return View(await PaginatedList<ProductGroup>.CreateAsync(productGroupings.AsNoTracking(), page ?? 1, pageSize));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }
         }
 
         // GET: ProductGroups/Details/5
@@ -68,14 +78,23 @@ namespace ProductGrouping.Controllers
                 return NotFound();
             }
 
-            var productGroup = await _productGroupRepository.Get(id);
-
-            if (productGroup == null)
+            try
             {
-                return NotFound();
-            }
+                var productGroup = await _productGroupRepository.Get(id);
 
-            return View(productGroup);
+                if (productGroup == null)
+                {
+                    return NotFound();               
+                }
+
+                return View(productGroup);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }     
         }
 
         // GET: ProductGroups/Create
@@ -91,24 +110,46 @@ namespace ProductGrouping.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProductReference,ProductOwner,Group,Site")] ProductGroup productGroup)
         {
-            if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
+            if (!@User.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+            else if (!ModelState.IsValid)
+            {
+                return View(productGroup);
+            }
+            else if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
             {
                 ViewBag.UserMessage = "You are not authorised to create a product Group. Please contact your local customer relationship manager.";
 
                 return View(productGroup);
             }
 
-            if (ModelState.IsValid)
-            {
-                productGroup.Id = Guid.NewGuid();
+            productGroup.Id = Guid.NewGuid();
 
-                await _productGroupRepository.Post(productGroup);
+            try
+            {
+                await _productGroupRepository.Post(productGroup);               
+            }
+            catch(Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }            
+
+            try
+            {
                 await _legacyFileRepository.Publish();
 
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
 
-            return View(productGroup);
+                return StatusCode(500);
+            }
         }
 
         // GET: ProductGroups/Edit/5
@@ -119,14 +160,23 @@ namespace ProductGrouping.Controllers
                 return NotFound();
             }
 
-            var productGroup = await _productGroupRepository.Get(id);
-
-            if (productGroup == null)
+            try
             {
-                return NotFound();
-            }
+                var productGroup = await _productGroupRepository.Get(id);
 
-            return View(productGroup);
+                if (productGroup == null)
+                {
+                    return NotFound();
+                }
+
+                return View(productGroup);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }            
         }
 
         // POST: ProductGroups/Edit/5
@@ -140,38 +190,50 @@ namespace ProductGrouping.Controllers
             {
                 return NotFound();
             }
+            else if (!@User.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+            else if (!ModelState.IsValid)
+            {
+                return View(productGroup);
+            }
             else if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
             {
                 ViewBag.UserMessage = "You are not authorised to edit this product Group. Please contact your local customer relationship manager.";
 
                 return View(productGroup);
             }
-
-            if (ModelState.IsValid)
+            
+            try
             {
-                try
+                await _productGroupRepository.Put(productGroup);                    
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                if (!await _productGroupRepository.Exists(productGroup.Id))
                 {
-                    await _productGroupRepository.Put(productGroup);                    
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException ex)
+                else
                 {
-                    if (!await _productGroupRepository.Exists(productGroup.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        _logger.LogCritical(500, ex.Message, ex);
-                        return StatusCode(500);
-                    }
+                    _logger.LogCritical(500, ex.Message, ex);
+                    return StatusCode(500);
                 }
+            }
 
+            try
+            {
                 await _legacyFileRepository.Publish();
 
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
 
-            return View(productGroup);
+                return StatusCode(500);
+            }
         }
 
         // GET: ProductGroups/Delete/5
@@ -180,16 +242,25 @@ namespace ProductGrouping.Controllers
             if (id == null)
             {
                 return NotFound();
-            }
+            }          
 
-            var productGroup = await _productGroupRepository.Get(id);
-
-            if (productGroup == null)
+            try
             {
-                return NotFound();
-            }
+                var productGroup = await _productGroupRepository.Get(id);
 
-            return View(productGroup);
+                if (productGroup == null)
+                {
+                    return NotFound();
+                }
+
+                return View(productGroup);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }
         }
 
         // POST: ProductGroups/Delete/5
@@ -197,7 +268,32 @@ namespace ProductGrouping.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var productGroup = await _productGroupRepository.Get(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+            else if (!@User.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+           
+            ProductGroup productGroup;
+
+            try
+            {
+                productGroup = await _productGroupRepository.Get(id);
+
+                if (productGroup == null)
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }
 
             if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
             {
@@ -206,10 +302,29 @@ namespace ProductGrouping.Controllers
                 return View(productGroup);
             }
 
-            await _productGroupRepository.Delete(productGroup);
-            await _legacyFileRepository.Publish();
+            try
+            {
+                await _productGroupRepository.Delete(productGroup);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
 
-            return RedirectToAction(nameof(Index));
+                return StatusCode(500);
+            }                    
+
+            try
+            {
+                await _legacyFileRepository.Publish();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }
         }
     }
 }

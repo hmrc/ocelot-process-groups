@@ -22,14 +22,14 @@ namespace ProductGrouping.Controllers
             _productGroupRepository = productGroupRepository;
         }
 
-        // GET: ProductGroupsApi
+        // GET: ProductGroupsData
         [HttpGet]
         public async Task<IEnumerable<ProductGroup>> GetProductGroups()
         {
-            return await _productGroupRepository.GetMany();
+            return await _productGroupRepository.GetMany();           
         }
 
-        // GET: ProductGroupsApi/5
+        // GET: ProductGroupsData/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductGroupById([FromRoute] Guid id)
         {
@@ -48,7 +48,7 @@ namespace ProductGrouping.Controllers
             return Ok(productGroup);
         }
 
-        // GET: ProductGroupsApi/GetbyProductReference?productReference=productReference
+        // GET: ProductGroupsData/GetbyProductReference?productReference=productReference
         [HttpGet(), Route("GetByProductReference")]
         public async Task<IActionResult> GetByProductReference(string productReference)
         {
@@ -60,28 +60,28 @@ namespace ProductGrouping.Controllers
             var productGroup = await _productGroupRepository.Get(productReference);
 
             if (productGroup == null)
-            {
+            {                
                 return NotFound();
             }
 
             return Ok(productGroup);
         }
 
-        // GET: ProductGroupsApi/GetByOwner?productOwner=productOwner
+        // GET: ProductGroupsData/GetByOwner?productOwner=productOwner
         [HttpGet(), Route("GetByProductOwner")]
         public async Task<IEnumerable<ProductGroup>> GetProductGroupsByProductOwner(string productOwner)
         {
             return await _productGroupRepository.GetMany(p => p.ProductOwner == productOwner);
         }
 
-        // GET: ProductGroupsApi/GetByGroup?group=group
+        // GET: ProductGroupsData/GetByGroup?group=group
         [HttpGet(), Route("GetByGroup")]
         public async Task<IEnumerable<ProductGroup>> GetProductGroupsByGroup(string group)
         {
             return await _productGroupRepository.GetMany(p => p.Group == group);
         }
 
-        // GET: ProductGroupsApi/GetBySite?site=site
+        // GET: ProductGroupsData/GetBySite?site=site
         [HttpGet(), Route("GetBySite")]
         public async Task<IEnumerable<ProductGroup>> GetProductGroupsBySite(string site)
         {
