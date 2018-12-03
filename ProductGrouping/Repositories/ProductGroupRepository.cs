@@ -26,13 +26,14 @@ namespace ProductGrouping.Repositories
         public Task<ProductGroup> Get(Guid? id)
         {
 
-            return _context.ProductGroups
+            return _context.ProductGroups                           
                            .FindAsync(id);
         }
 
         public async Task<ProductGroup> Get(string productReference)
         {
             return await _context.ProductGroups
+                                 .Include(p => p.Parent)
                                  .Where(p => p.ProductReference == productReference)
                                  .FirstOrDefaultAsync();
                         
@@ -41,12 +42,14 @@ namespace ProductGrouping.Repositories
         public async Task<IEnumerable<ProductGroup>> GetMany()
         {
              return await _context.ProductGroups
+                                  .Include(p => p.Parent)
                                   .ToListAsync();
         }
 
         public async Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where)
         {
             return await _context.ProductGroups
+                                 .Include(p => p.Parent)
                                  .Where(where)
                                  .ToListAsync();
         }
@@ -56,12 +59,14 @@ namespace ProductGrouping.Repositories
             if (ascending)
             {
                 return _context.ProductGroups
+                               .Include(p => p.Parent)
                                .Where(where)
                                .OrderBy(orderBy);
             }
             else
             {
                 return _context.ProductGroups
+                               .Include(p => p.Parent)
                                .Where(where)
                                .OrderByDescending(orderBy);
             }            
@@ -69,7 +74,8 @@ namespace ProductGrouping.Repositories
 
         public IEnumerable<SelectListItem> GetSelectList()
         {
-            return _context.ProductGroups                
+            return _context.ProductGroups
+                           .Include(p => p.Parent)
                            .Select(p => new SelectListItem
                                     {
                                         Text = p.ProductReference,

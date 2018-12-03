@@ -24,7 +24,9 @@
             </div>          
             <div class="form-group">
                 <label class="control-label">Parent Reference</label>
-                <select asp-for="ParentId" asp-items="@ViewBag.Products" class="form-control"></select>              
+                <select asp-for="ParentId" asp-items="@ViewBag.Products" class="form-control">
+                       <option></option>
+                </select>              
                 <span asp-validation-for="ParentId" class="text-danger"></span>
             </div>
 
