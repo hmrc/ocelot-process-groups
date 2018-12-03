@@ -25,9 +25,10 @@ namespace ProductGrouping.Repositories
 
         public Task<ProductGroup> Get(Guid? id)
         {
-
-            return _context.ProductGroups                           
-                           .FindAsync(id);
+            return _context.ProductGroups 
+                           .Include(p => p.Parent)
+                           .Where(p => p.Id == id)
+                           .FirstOrDefaultAsync();
         }
 
         public async Task<ProductGroup> Get(string productReference)
