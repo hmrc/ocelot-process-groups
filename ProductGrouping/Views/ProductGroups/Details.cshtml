@@ -1,0 +1,46 @@
+﻿@model ProductGrouping.Models.ProductGroup
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="text-muted">Product Grouping Details</h4>
+
+<hr />
+<div>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.ProductReference)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ProductReference)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.ProductOwner)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ProductOwner)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Parent Reference
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Parent.ProductReference)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+</div>

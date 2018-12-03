@@ -1,5 +1,3 @@
-using System;
-
 namespace ProductGrouping.Models
 {
     public class ErrorViewModel

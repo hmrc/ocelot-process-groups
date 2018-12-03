@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductGrouping.Interfaces;
+using ProductGrouping.Models;
+using ProductGrouping.Repositories;
+using System;
 
 namespace ProductGrouping
 {
@@ -24,15 +23,24 @@ namespace ProductGrouping
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+            services.AddDbContext<Context>(options =>
+                options
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection") +
+                            Environment.GetEnvironmentVariable("Connection", EnvironmentVariableTarget.Machine)));
+
+            services.AddAuthentication(HttpSysDefaults.AuthenticationScheme);
+
+            services.AddMvc();
+
+            services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ILegacyFileRepository, LegacyFileRepository>();
+
+            services.Configure<IISOptions>(c =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                c.ForwardClientCertificate = true;
+                c.AutomaticAuthentication = true;
             });
-
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +52,7 @@ namespace ProductGrouping
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Shared/Error");
                 app.UseHsts();
             }
 
@@ -52,11 +60,18 @@ namespace ProductGrouping
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<Context>();
+
+                context.Database.EnsureCreated();
+            }
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller}/{action=Index}/{id?}");
             });
         }
     }
