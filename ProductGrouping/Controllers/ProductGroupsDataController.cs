@@ -78,14 +78,7 @@ namespace ProductGrouping.Controllers
         [HttpGet(), Route("GetByGroup")]
         public async Task<IEnumerable<ProductGroup>> GetProductGroupsByGroup(string group)
         {
-            return await _productGroupRepository.GetMany(p => p.Group == group);
-        }
-
-        // GET: ProductGroupsData/GetBySite?site=site
-        [HttpGet(), Route("GetBySite")]
-        public async Task<IEnumerable<ProductGroup>> GetProductGroupsBySite(string site)
-        {
-            return await _productGroupRepository.GetMany(p => p.Site == site);
+            return await _productGroupRepository.GetMany(p => p.Parent.ProductReference == group);
         }
     }
 }

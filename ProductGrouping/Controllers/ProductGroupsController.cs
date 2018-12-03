@@ -50,8 +50,7 @@ namespace ProductGrouping.Controllers
             {
                 where = p => p.ProductReference.ToUpper().Contains(searchString.ToUpper()) ||
                              p.ProductOwner.ToUpper().Contains(searchString.ToUpper()) ||
-                             p.Site.ToUpper().Contains(searchString.ToUpper()) ||
-                             p.Group.ToUpper().Contains(searchString.ToUpper());
+                             p.Parent.ProductReference.ToUpper().Contains(searchString.ToUpper());
             }
 
             int pageSize = 20;
