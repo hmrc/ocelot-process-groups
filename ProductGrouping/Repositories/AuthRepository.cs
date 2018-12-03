@@ -21,6 +21,9 @@ namespace ProductGrouping.Repositories
 
         private bool IsAuthedRoleAsync(string pid)
         {
+#if DEBUG
+            return true;
+#endif
             try
             {
                 var file = Environment.GetEnvironmentVariable("StaffList", EnvironmentVariableTarget.Machine);

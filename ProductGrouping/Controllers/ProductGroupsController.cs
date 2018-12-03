@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductGrouping.Controllers.Helpers;
 using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -67,7 +65,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -94,7 +92,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }     
         }
 
@@ -111,7 +109,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -130,30 +128,18 @@ namespace ProductGrouping.Controllers
             {
                 return View(productGroup);
             }
-#if !DEBUG
             else if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
             {
                 ViewBag.UserMessage = "You are not authorised to create a product Group. Please contact your local customer relationship manager.";
 
                 return View(productGroup);
             }
-#endif
 
-            productGroup.Id = Guid.NewGuid();
-
-            try
-            {
-                await _productGroupRepository.Post(productGroup);               
-            }
-            catch(Exception ex)
-            {
-                _logger.LogCritical(500, ex.Message, ex);
-
-                return StatusCode(500);
-            }            
+            productGroup.Id = Guid.NewGuid();          
 
             try
             {
+                await _productGroupRepository.Post(productGroup);
                 await _legacyFileRepository.Publish();
 
                 return RedirectToAction(nameof(Index));
@@ -162,7 +148,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -176,17 +162,7 @@ namespace ProductGrouping.Controllers
 
             try
             {
-                ViewBag.Products = _productGroupRepository.GetSelectList();               
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(500, ex.Message, ex);
-
-                return StatusCode(500);
-            }
-
-            try
-            {
+                ViewBag.Products = _productGroupRepository.GetSelectList();
                 var productGroup = await _productGroupRepository.Get(id);
 
                 if (productGroup == null)
@@ -200,7 +176,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -243,7 +219,7 @@ namespace ProductGrouping.Controllers
                 else
                 {
                     _logger.LogCritical(500, ex.Message, ex);
-                    return StatusCode(500);
+                    return StatusCode(500, ex.Message);
                 }
             }
 
@@ -257,7 +233,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -284,7 +260,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -317,7 +293,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
 
             if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
@@ -325,21 +301,11 @@ namespace ProductGrouping.Controllers
                 ViewBag.UserMessage = "You are not authorised to delete this product Group. Please contact your local customer relationship manager.";
 
                 return View(productGroup);
-            }
+            }                  
 
             try
             {
                 await _productGroupRepository.Delete(productGroup);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(500, ex.Message, ex);
-
-                return StatusCode(500);
-            }                    
-
-            try
-            {
                 await _legacyFileRepository.Publish();
 
                 return RedirectToAction(nameof(Index));
@@ -348,7 +314,7 @@ namespace ProductGrouping.Controllers
             {
                 _logger.LogCritical(500, ex.Message, ex);
 
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
     }
