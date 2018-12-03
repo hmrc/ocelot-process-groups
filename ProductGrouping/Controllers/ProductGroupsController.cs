@@ -101,9 +101,18 @@ namespace ProductGrouping.Controllers
         // GET: ProductGroups/Create
         public IActionResult Create()
         {
-            ViewBag.Products = _productGroupRepository.GetSelectList();
-          
-            return View();
+            try
+            {
+                ViewBag.Products = _productGroupRepository.GetSelectList();
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }
         }
 
         // POST: ProductGroups/Create
@@ -165,6 +174,17 @@ namespace ProductGrouping.Controllers
 
             try
             {
+                ViewBag.Products = _productGroupRepository.GetSelectList();               
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(500, ex.Message, ex);
+
+                return StatusCode(500);
+            }
+
+            try
+            {
                 var productGroup = await _productGroupRepository.Get(id);
 
                 if (productGroup == null)
@@ -179,7 +199,7 @@ namespace ProductGrouping.Controllers
                 _logger.LogCritical(500, ex.Message, ex);
 
                 return StatusCode(500);
-            }            
+            }
         }
 
         // POST: ProductGroups/Edit/5
