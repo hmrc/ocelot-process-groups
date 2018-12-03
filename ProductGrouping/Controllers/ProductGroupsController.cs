@@ -107,7 +107,7 @@ namespace ProductGrouping.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProductReference,ProductOwner,Group,Site")] ProductGroup productGroup)
+        public async Task<IActionResult> Create([Bind("Id,ProductReference,ProductOwner,ParentId")] ProductGroup productGroup)
         {
             if (!@User.Identity.IsAuthenticated)
             {
@@ -183,7 +183,7 @@ namespace ProductGrouping.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ProductReference,ProductOwner,Group,Site")] ProductGroup productGroup)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ProductReference,ProductOwner,ParentId")] ProductGroup productGroup)
         {
             if (id != productGroup.Id)
             {

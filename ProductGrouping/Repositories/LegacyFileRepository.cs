@@ -29,7 +29,7 @@ namespace ProductGrouping.Repositories
             XElement export = new XElement("dataroot",
                                         productGroups.Select(p => new XElement("ProductGrouping",
                                                                              new XElement("ref", p.ProductReference),
-                                                                             new XElement("area", p.Parent.ProductReference))
+                                                                             new XElement("area", p.Parent?.ProductReference))
                                                                              )                                                 
                                                                             );
 

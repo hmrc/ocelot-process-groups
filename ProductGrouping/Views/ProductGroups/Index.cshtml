@@ -42,10 +42,10 @@
                     @Html.DisplayFor(modelItem => item.ProductReference)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Group)
+                    @Html.DisplayFor(modelItem => item.ProductOwner)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Site)
+                    @Html.DisplayFor(modelItem => item.Parent.ProductReference)
                 </td>
                 <td>
                     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
