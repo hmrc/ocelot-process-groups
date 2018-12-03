@@ -1,4 +1,5 @@
-﻿using ProductGrouping.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using ProductGrouping.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace ProductGrouping.Interfaces
         Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where);
 
         IQueryable<ProductGroup> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending);
+
+        IEnumerable<SelectListItem> GetSelectList();
 
         Task Post(ProductGroup productGroup);
 

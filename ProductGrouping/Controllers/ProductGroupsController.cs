@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductGrouping.Controllers.Helpers;
 using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -99,6 +101,8 @@ namespace ProductGrouping.Controllers
         // GET: ProductGroups/Create
         public IActionResult Create()
         {
+            ViewBag.Products = _productGroupRepository.GetSelectList();
+          
             return View();
         }
 

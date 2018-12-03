@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
@@ -64,6 +65,16 @@ namespace ProductGrouping.Repositories
                                .Where(where)
                                .OrderByDescending(orderBy);
             }            
+        }
+
+        public IEnumerable<SelectListItem> GetSelectList()
+        {
+            return _context.ProductGroups                
+                           .Select(p => new SelectListItem
+                                    {
+                                        Text = p.ProductReference,
+                                        Value = p.Id.ToString()
+                                    });
         }
 
         public async Task Post(ProductGroup productGroup)
