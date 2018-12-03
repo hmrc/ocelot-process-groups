@@ -130,12 +130,14 @@ namespace ProductGrouping.Controllers
             {
                 return View(productGroup);
             }
+#if !DEBUG
             else if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
             {
                 ViewBag.UserMessage = "You are not authorised to create a product Group. Please contact your local customer relationship manager.";
 
                 return View(productGroup);
             }
+#endif
 
             productGroup.Id = Guid.NewGuid();
 

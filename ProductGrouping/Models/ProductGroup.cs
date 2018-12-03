@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,6 +30,7 @@ namespace ProductGrouping.Models
         [ForeignKey(nameof(Parent))]
         public Guid? ParentId { get; set; }
 
+        [JsonIgnore]
         public virtual ProductGroup Parent { get; set; }
 
         public virtual ICollection<ProductGroup> Children { get; set; }

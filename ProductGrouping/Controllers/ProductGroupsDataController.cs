@@ -4,6 +4,7 @@ using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProductGrouping.Controllers
@@ -26,7 +27,7 @@ namespace ProductGrouping.Controllers
         [HttpGet]
         public async Task<IEnumerable<ProductGroup>> GetProductGroups()
         {
-            return await _productGroupRepository.GetMany();           
+            return (await _productGroupRepository.GetMany()).Where(p => !p.ParentId.HasValue);
         }
 
         // GET: ProductGroupsData/5
