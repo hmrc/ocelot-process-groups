@@ -1,4 +1,27 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function getOwnerNameCreate() {   
 
-// Write your JavaScript code.
+    var ownerPid = $("#productOwner").val();
+    var url = "../../ad/api/loggedinuser/" + ownerPid;
+
+    $.get(url)
+        .done(function (data) {
+            $("#productOwnerName").html("<div class='text-success'>Name: " + data.name + "</div>");
+        })
+        .fail(function () {
+            $("#productOwnerName").html("<div class='text-danger'>PID not found</div>");
+        });
+}
+
+function getOwnerNameEdit() {
+
+    var ownerPid = $("#productOwner").val();
+    var url = "../../../ad/api/loggedinuser/" + ownerPid;
+
+    $.get(url)
+        .done(function (data) {
+            $("#productOwnerName").html("<div class='text-success'>Name: " + data.name + "</div>");
+        })
+        .fail(function () {
+            $("#productOwnerName").html("<div class='text-danger'>PID not found</div>");
+        });
+}

@@ -23,7 +23,7 @@ namespace ProductGrouping.Repositories
         {
 #if DEBUG
             return true;
-#endif
+#else
             try
             {
                 var file = Environment.GetEnvironmentVariable("StaffList", EnvironmentVariableTarget.Machine);
@@ -61,7 +61,8 @@ namespace ProductGrouping.Repositories
                 _logger.LogCritical(500, ex.Message, ex);
 
                 return false;
-            }            
+            }   
+#endif
         }
     }
 }
