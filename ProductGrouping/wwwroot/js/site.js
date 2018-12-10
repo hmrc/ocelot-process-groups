@@ -7,8 +7,7 @@
         url = "../../ad/api/loggedinuser/" + ownerPid;
     } else if(page === "Edit"){
         url = "../../../ad/api/loggedinuser/" + ownerPid;
-    }
-    
+    }    
 
     $.get(url)
         .done(function (data) {
