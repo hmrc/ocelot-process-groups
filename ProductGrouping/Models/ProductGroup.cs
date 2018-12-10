@@ -27,7 +27,7 @@ namespace ProductGrouping.Models
         [RegularExpression("^\\d{7}", ErrorMessage = "Product Owner must a PID eg. 1111111")]
         public string ProductOwner { get; set; }
 
-        [ForeignKey(nameof(Parent))]
+        [ForeignKey(nameof(Parent))]        
         public Guid? ParentId { get; set; }
 
         [JsonIgnore]

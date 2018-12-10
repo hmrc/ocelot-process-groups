@@ -5,6 +5,8 @@ using ProductGrouping.Controllers.Helpers;
 using ProductGrouping.Interfaces;
 using ProductGrouping.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -85,6 +87,8 @@ namespace ProductGrouping.Controllers
                 {
                     return NotFound();               
                 }
+
+                productGroup.Children = (List<ProductGroup>) await _productGroupRepository.GetMany(p => p.ParentId == productGroup.Id);
 
                 return View(productGroup);
             }
@@ -187,7 +191,7 @@ namespace ProductGrouping.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,ProductReference,ProductOwner,ParentId")] ProductGroup productGroup)
         {
-            if (id != productGroup.Id)
+            if (id == default(Guid))
             {
                 return NotFound();
             }
@@ -208,6 +212,13 @@ namespace ProductGrouping.Controllers
             
             try
             {
+                if (await CheckPartents(id, productGroup.ParentId) || await CheckChildren(id, productGroup.Id))
+                {
+                    ViewBag.UserMessage = "Cant be own Ancestor.";
+
+                    return View(productGroup);
+                }
+
                 await _productGroupRepository.Put(productGroup);                    
             }
             catch (DbUpdateConcurrencyException ex)
@@ -269,7 +280,7 @@ namespace ProductGrouping.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (id == null)
+            if (id == default(Guid))
             {
                 return NotFound();
             }
@@ -287,6 +298,13 @@ namespace ProductGrouping.Controllers
                 if (productGroup == null)
                 {
                     return NotFound();
+                }
+
+                if ((await _productGroupRepository.GetMany(p => p.ParentId == productGroup.Id)).Any())
+                {
+                    ViewBag.UserMessage = "The product has chidren. Cannot be deleted at this time";
+
+                    return View(productGroup);
                 }
             }
             catch (Exception ex)
@@ -316,6 +334,43 @@ namespace ProductGrouping.Controllers
 
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        private async Task<bool> CheckChildren(Guid checkId, Guid parentId)
+        {
+            var children = await _productGroupRepository.GetMany(p => p.ParentId == parentId);
+            foreach (var child in children)
+            {
+                if (child.Id == checkId)
+                {
+                    return true;
+                }
+                if (await CheckChildren(checkId, child.Id))
+                {
+                    return true;
+                };
+            }
+            return false;
+        }
+
+        private async Task<bool> CheckPartents(Guid id, Guid? parentId)
+        {
+            if (parentId == null)
+            {
+                return false;
+            }
+
+            var parent = await _productGroupRepository.Get(parentId);
+
+            if (parent.Id == id)
+            {
+                return true;
+            }
+            if (parent.ParentId == null)
+            {
+                return false;
+            }
+            return await CheckPartents(id, parent.ParentId.Value);
         }
     }
 }

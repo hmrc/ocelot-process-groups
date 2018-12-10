@@ -30,6 +30,6 @@ namespace ProductGrouping.Controllers
             {
                 return Content("true");
             }
-        }
+        }       
     }
 }
