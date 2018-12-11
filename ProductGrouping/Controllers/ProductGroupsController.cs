@@ -134,6 +134,7 @@ namespace ProductGrouping.Controllers
             }
             else if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
             {
+                ViewBag.Products = _productGroupRepository.GetSelectList();
                 ViewBag.UserMessage = "You are not authorised to create a product Group. Please contact your local customer relationship manager.";
 
                 return View(productGroup);
@@ -167,6 +168,7 @@ namespace ProductGrouping.Controllers
             try
             {
                 ViewBag.Products = _productGroupRepository.GetSelectList();
+
                 var productGroup = await _productGroupRepository.Get(id);
 
                 if (productGroup == null)
@@ -201,10 +203,13 @@ namespace ProductGrouping.Controllers
             }
             else if (!ModelState.IsValid)
             {
+                ViewBag.Products = _productGroupRepository.GetSelectList();
+
                 return View(productGroup);
             }
             else if (!await _authRepository.IsAuthedRole(@User.Identity.Name.Substring(@User.Identity.Name.IndexOf(@"\") + 1)))
             {
+                ViewBag.Products = _productGroupRepository.GetSelectList();
                 ViewBag.UserMessage = "You are not authorised to edit this product Group. Please contact your local customer relationship manager.";
 
                 return View(productGroup);
@@ -214,6 +219,7 @@ namespace ProductGrouping.Controllers
             {
                 if (await CheckPartents(id, productGroup.ParentId) || await CheckChildren(id, productGroup.Id))
                 {
+                    ViewBag.Products = _productGroupRepository.GetSelectList();
                     ViewBag.UserMessage = "Cant be own Ancestor.";
 
                     return View(productGroup);
@@ -230,6 +236,7 @@ namespace ProductGrouping.Controllers
                 else
                 {
                     _logger.LogCritical(500, ex.Message, ex);
+
                     return StatusCode(500, ex.Message);
                 }
             }

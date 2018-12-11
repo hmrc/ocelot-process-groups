@@ -3,6 +3,10 @@
     var ownerPid = $("#productOwner").val();
     var url;
 
+    if (ownerPid === "") {
+        return;
+    }       
+
     if (page === "Create") {
         url = "../../ad/api/loggedinuser/" + ownerPid;
     } else if(page === "Edit"){
