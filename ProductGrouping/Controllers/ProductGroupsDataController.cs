@@ -68,6 +68,47 @@ namespace ProductGrouping.Controllers
             return Ok(productGroup);
         }
 
+        // GET: ProductGroupsData/WhereAmI?productReference=productReference
+        [HttpGet(), Route("WhereAmI")]
+        public async Task<ProductGroup> WhereAmI(string productReference)
+        {
+            ProductGroup productGroup;
+
+            productGroup  = await _productGroupRepository.Get(productReference);                       
+
+            if (productGroup != null)
+            {
+                return productGroup;
+            }
+            
+            var referer = HttpContext.Request.Headers["Referer"].ToString();
+
+            if (!String.IsNullOrWhiteSpace(referer))
+            {
+                var site = referer.Substring(8, referer.IndexOf('.') - 8).Replace("cc-", "");
+                var lob = productReference.Substring(0, 3);
+
+                productGroup = await _productGroupRepository.Get(p => p.ProductReference == lob &&
+                                                                      p.Parent.ProductReference == site);
+
+                if (productGroup != null)
+                {
+                    return productGroup;
+                }
+
+                productGroup = await _productGroupRepository.Get(site);
+
+                if (productGroup != null)
+                {
+                    return productGroup;
+                }
+            }        
+
+            productGroup = await _productGroupRepository.Get("HMRC");
+
+            return productGroup; 
+        }
+
         // GET: ProductGroupsData/GetByOwner?productOwner=productOwner
         [HttpGet(), Route("GetByProductOwner")]
         public async Task<IEnumerable<ProductGroup>> GetProductGroupsByProductOwner(string productOwner)

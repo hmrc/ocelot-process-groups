@@ -14,6 +14,8 @@ namespace ProductGrouping.Interfaces
 
         Task<ProductGroup> Get(string productReference);
 
+        Task<ProductGroup> Get(Expression<Func<ProductGroup, bool>> where);
+
         Task<IEnumerable<ProductGroup>> GetMany();
 
         Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where);
