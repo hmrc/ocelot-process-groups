@@ -40,6 +40,15 @@ namespace ProductGrouping.Repositories
                         
         }
 
+        public async Task<ProductGroup> Get(Expression<Func<ProductGroup, bool>> where)
+        {
+            return await _context.ProductGroups
+                                 .Include(p => p.Parent)
+                                 .Where(where)
+                                 .FirstOrDefaultAsync();
+
+        }
+
         public async Task<IEnumerable<ProductGroup>> GetMany()
         {
              return await _context.ProductGroups
