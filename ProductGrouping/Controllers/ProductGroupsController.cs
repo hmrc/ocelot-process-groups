@@ -34,8 +34,7 @@ namespace ProductGrouping.Controllers
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page)
         {
             Expression<Func<ProductGroup, bool>> where = p => p.Id != null;
-            Expression<Func<ProductGroup, string>> orderby = p => p.ProductReference;
-            var ascending = true;
+            Expression<Func<ProductGroup, string>> orderby = p => p.ProductReference;       
 
             if (searchString != null)
             {
@@ -59,7 +58,7 @@ namespace ProductGrouping.Controllers
        
             try
             {
-                var productGroupings = _productGroupRepository.GetMany(where, orderby, ascending);
+                var productGroupings = _productGroupRepository.GetMany(where, orderby);
 
                 return View(await PaginatedList<ProductGroup>.CreateAsync(productGroupings.AsNoTracking(), page ?? 1, pageSize));
             }
@@ -81,7 +80,7 @@ namespace ProductGrouping.Controllers
 
             try
             {
-                var productGroup = await _productGroupRepository.Get(id);
+                var productGroup = await _productGroupRepository.Get(p => p.Id == id);
 
                 if (productGroup == null)
                 {
@@ -169,7 +168,7 @@ namespace ProductGrouping.Controllers
             {
                 ViewBag.Products = _productGroupRepository.GetSelectList();
 
-                var productGroup = await _productGroupRepository.Get(id);
+                var productGroup = await _productGroupRepository.Get(p => p.Id == id);
 
                 if (productGroup == null)
                 {
@@ -265,7 +264,7 @@ namespace ProductGrouping.Controllers
 
             try
             {
-                var productGroup = await _productGroupRepository.Get(id);
+                var productGroup = await _productGroupRepository.Get(p => p.Id == id);
 
                 if (productGroup == null)
                 {
@@ -300,7 +299,7 @@ namespace ProductGrouping.Controllers
 
             try
             {
-                productGroup = await _productGroupRepository.Get(id);
+                productGroup = await _productGroupRepository.Get(p => p.Id == id);
 
                 if (productGroup == null)
                 {
@@ -367,7 +366,7 @@ namespace ProductGrouping.Controllers
                 return false;
             }
 
-            var parent = await _productGroupRepository.Get(parentId);
+            var parent = await _productGroupRepository.Get(p => p.Id == parentId);
 
             if (parent.Id == id)
             {

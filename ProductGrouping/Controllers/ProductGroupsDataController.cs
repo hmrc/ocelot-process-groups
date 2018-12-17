@@ -39,7 +39,7 @@ namespace ProductGrouping.Controllers
                 return BadRequest(ModelState);
             }
 
-            var productGroup = await _productGroupRepository.Get(id);
+            var productGroup = await _productGroupRepository.Get(p => p.Id == id);
 
             if (productGroup == null)
             {
@@ -58,7 +58,7 @@ namespace ProductGrouping.Controllers
                 return BadRequest(ModelState);
             }
 
-            var productGroup = await _productGroupRepository.Get(productReference);
+            var productGroup = await _productGroupRepository.Get(p => p.ProductReference == productReference);
 
             if (productGroup == null)
             {                
@@ -74,7 +74,7 @@ namespace ProductGrouping.Controllers
         {
             ProductGroup productGroup;
 
-            productGroup  = await _productGroupRepository.Get(productReference);                       
+            productGroup  = await _productGroupRepository.Get(p => p.ProductReference == productReference);                       
 
             if (productGroup != null)
             {
@@ -96,7 +96,7 @@ namespace ProductGrouping.Controllers
                     return productGroup;
                 }
 
-                productGroup = await _productGroupRepository.Get(site);
+                productGroup = await _productGroupRepository.Get(p => p.ProductReference == site);
 
                 if (productGroup != null)
                 {
@@ -104,7 +104,7 @@ namespace ProductGrouping.Controllers
                 }
             }        
 
-            productGroup = await _productGroupRepository.Get("HMRC");
+            productGroup = await _productGroupRepository.Get(p => p.ProductReference == "HMRC");
 
             return productGroup; 
         }
