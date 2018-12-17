@@ -22,24 +22,7 @@ namespace ProductGrouping.Repositories
             _context = context;
             _logger = logger;
         }
-
-        public Task<ProductGroup> Get(Guid? id)
-        {
-            return _context.ProductGroups 
-                           .Include(p => p.Parent)
-                           .Where(p => p.Id == id)
-                           .FirstOrDefaultAsync();
-        }
-
-        public async Task<ProductGroup> Get(string productReference)
-        {
-            return await _context.ProductGroups
-                                 .Include(p => p.Parent)
-                                 .Where(p => p.ProductReference == productReference)
-                                 .FirstOrDefaultAsync();
-                        
-        }
-
+        
         public async Task<ProductGroup> Get(Expression<Func<ProductGroup, bool>> where)
         {
             return await _context.ProductGroups
@@ -64,22 +47,12 @@ namespace ProductGrouping.Repositories
                                  .ToListAsync();
         }
 
-        public IQueryable<ProductGroup> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending)
-        {
-            if (ascending)
-            {
-                return _context.ProductGroups
-                               .Include(p => p.Parent)
-                               .Where(where)
-                               .OrderBy(orderBy);
-            }
-            else
-            {
-                return _context.ProductGroups
-                               .Include(p => p.Parent)
-                               .Where(where)
-                               .OrderByDescending(orderBy);
-            }            
+        public IQueryable<ProductGroup> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy)
+        {            
+            return _context.ProductGroups
+                            .Include(p => p.Parent)
+                            .Where(where)
+                            .OrderBy(orderBy);                      
         }
 
         public IEnumerable<SelectListItem> GetSelectList()

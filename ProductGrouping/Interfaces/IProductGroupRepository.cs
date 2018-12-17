@@ -10,17 +10,13 @@ namespace ProductGrouping.Interfaces
 {
     public interface IProductGroupRepository
     {
-        Task<ProductGroup> Get(Guid? id);
-
-        Task<ProductGroup> Get(string productReference);
-
         Task<ProductGroup> Get(Expression<Func<ProductGroup, bool>> where);
 
         Task<IEnumerable<ProductGroup>> GetMany();
 
         Task<IEnumerable<ProductGroup>> GetMany(Expression<Func<ProductGroup, bool>> where);
 
-        IQueryable<ProductGroup> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy, bool ascending);
+        IQueryable<ProductGroup> GetMany(Expression<Func<ProductGroup, bool>> where, Expression<Func<ProductGroup, string>> orderBy);
 
         IEnumerable<SelectListItem> GetSelectList();
 
