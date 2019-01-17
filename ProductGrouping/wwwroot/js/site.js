@@ -1,65 +1,112 @@
-﻿function getOwnerName(page) {
+﻿function getOwnerNames(page) {
 
-    var ownerPid = $("#productOwner").val();
-    var url;
+    var ownerPid = $("#Owners").val();
 
     if (ownerPid === "") {
         return;
-    }       
+    }
+
+    ownerPid.split(",").forEach(function (pid) {
+
+        $.when(getOwnerData(pid, page))
+            .done(function (data) {
+                $("#productOwnerName").append(data.name + " ");
+            })
+            .fail(function () {
+                $("#productOwnerName").append("PID not found ");
+            });
+    });
+}
+
+function getOwnerData(ownerPid, page) {
+
+    var url;
 
     if (page === "Create") {
         url = "../../ad/api/loggedinuser/" + ownerPid;
-    } else if(page === "Edit"){
+    } else if (page === "Edit") {
         url = "../../../ad/api/loggedinuser/" + ownerPid;
-    }    
-
-    $.get(url)
-        .done(function (data) {
-            $("#productOwnerName").html("<div class='text-success'>Name: " + data.name + "</div>");
-        })
-        .fail(function () {
-            $("#productOwnerName").html("<div class='text-danger'>PID not found</div>");
-        });
-}
-
-function getOwnerData(ownerPid) {
-
-    var url = "../../ad/api/loggedinuser/" + ownerPid;
+    } else if (page === "Delete") { 
+        url = "../../../ad/api/loggedinuser/" + ownerPid;
+    } else if (page === "Details") {
+        url = "../../../ad/api/loggedinuser/" + ownerPid;
+    } else if (page === "Index") {
+        url = "../ad/api/loggedinuser/" + ownerPid;
+    }   
 
     return $.get(url);
- }
+}
 
-function showUserData(ownerDetails) {
+function addUserData(ownerDetails) {
 
     if (ownerDetails === undefined) {
-        $("#modalPid").val("PID not found");
-        $("#modalName").val("Name not found");
-        $("#modalPhone").val("Phone not found");
-        $("#modalEmail").val("Email not found");
+        $("#body").append(
+            '<div class="card">' +
+            '<div class= "card-body">' +
+            '<label class= "control-label" >PID</label>' +
+            '<input id="modalPid" class="form-control" disabled value="PID not found"/>' +
+
+            '<label class="control-label">Name</label>' +
+            '<input id="modalName" class="form-control" disabled value="PID not found"/>' +
+
+            '<label class="control-label">Phone</label>' +
+            '<input id="modalPhone" class="form-control" disabled value="PID not found"/>' +
+
+            '<label class="control-label">Email</label>' +
+            '<input id="modalEmail" class="form-control" disabled value="PID not found"/>' +
+            '</div>' +
+            '</div>' +
+
+            '<br />'
+        );
     } else {
-        $("#modalPid").val(ownerDetails.pid);
-        $("#modalName").val(ownerDetails.name);
-        $("#modalPhone").val(ownerDetails.phoneNumber);
-        $("#modalEmail").val(ownerDetails.email);
+        $("#body").append(
+            '<div class="card">' +
+            '<div class= "card-body">' +
+            '<label class= "control-label" >PID</label>' +
+            '<input id="modalPid" class="form-control" disabled value="' + ownerDetails.pid + '"/>' +
+
+            '<label class="control-label">Name</label>' +
+            '<input id="modalName" class="form-control" disabled value="' + ownerDetails.name + '"/>' +
+
+            '<label class="control-label">Phone</label>' +
+            '<input id="modalPhone" class="form-control" disabled value="' + ownerDetails.phoneNumber + '"/>' +
+
+            '<label class="control-label">Email</label>' +
+            '<input id="modalEmail" class="form-control" disabled value="' + ownerDetails.email + '"/>' +
+            '</div>' +
+            '</div>' +
+
+            '<br />'
+        );
     }
 }
 
-$('#OwnerModal').on('show.bs.modal', function (event) {
+$('#OwnerModalList').on('show.bs.modal', function (event) {
 
-    $("#modalPid").val("");
-    $("#modalName").val("");
-    $("#modalPhone").val("");
-    $("#modalEmail").val("");
+    $("#body").empty();
 
     var button = $(event.relatedTarget);
-    var owner = button.data('whatever');
+    var owners = button.data('whatever');
+    var page = button.data('page');
 
-    getOwnerData(owner)
-        .done(function (data) {
-            showUserData(data);
-        })
-        .fail(function () {
-            showUserData();
+    if (owners.length > 7) {
+        owners.split(",").forEach(function (pid) {
+            $.when(getOwnerData(pid, page))
+                .done(function (data) {
+                    addUserData(data);
+                })
+                .fail(function () {
+                    addUserData();
+                });
         });
+    } else {
+        $.when(getOwnerData(owners, page))
+            .done(function (data) {
+                addUserData(data);
+            })
+            .fail(function () {
+                addUserData();
+            });
+    }
 });
-
