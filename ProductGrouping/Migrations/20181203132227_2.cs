@@ -3,9 +3,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProductGrouping.Migrations
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public partial class _2 : Migration
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected override void Up(MigrationBuilder migrationBuilder)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             migrationBuilder.DropColumn(
                 name: "Group",
@@ -42,7 +46,9 @@ namespace ProductGrouping.Migrations
                 onDelete: ReferentialAction.Restrict);
         }
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected override void Down(MigrationBuilder migrationBuilder)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_ProductGroups_ProductGroups_ParentId",

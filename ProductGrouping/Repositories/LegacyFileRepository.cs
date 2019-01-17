@@ -9,11 +9,19 @@ using System.Xml.Linq;
 
 namespace ProductGrouping.Repositories
 {
-    public class LegacyFileRepository: ILegacyFileRepository
+    /// <summary>
+    /// Legacy file repository to create xml file containing product groups
+    /// </summary>
+    public class LegacyFileRepository : ILegacyFileRepository
     {
         private readonly ILogger<LegacyFileRepository> _logger;
         private readonly IProductGroupRepository _productGroupRepository;
 
+        /// <summary>
+        /// Constructor for legacy file repository
+        /// </summary>
+        /// <param name="logger">Logger dependency injected</param>
+        /// <param name="productGroupRepository">Product group repository dependency injected</param>
         public LegacyFileRepository(ILogger<LegacyFileRepository> logger,
                                     IProductGroupRepository productGroupRepository)
         {
@@ -21,6 +29,10 @@ namespace ProductGrouping.Repositories
             _productGroupRepository = productGroupRepository;
         }
 
+        /// <summary>
+        /// Publish product groups in legacy format
+        /// </summary>
+        /// <returns>Task</returns>
         public async Task Publish()
         {
             var publishFile = $"{Environment.GetEnvironmentVariable("LegacyProductGroupingLocation", EnvironmentVariableTarget.Machine)}";
