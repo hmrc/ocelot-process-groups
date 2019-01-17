@@ -13,7 +13,9 @@ namespace ProductGrouping.Migrations
     [Migration("20181203132227_2")]
     partial class _2
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
 #pragma warning disable 612, 618
             modelBuilder

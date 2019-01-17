@@ -11,9 +11,13 @@ namespace ProductGrouping.Migrations
 {
     [DbContext(typeof(Context))]
     [Migration("20181203171402_3")]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     partial class _3
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -8,15 +8,27 @@ using System.Xml;
 
 namespace ProductGrouping.Repositories
 {
+    /// <summary>
+    /// Auth repository
+    /// </summary>
     public class AuthRepository: IAuthRepository
     {
         private readonly ILogger<AuthRepository> _logger;
 
+        /// <summary>
+        /// Auth repository constructor
+        /// </summary>
+        /// <param name="logger">Logger dependency injected</param>
         public AuthRepository(ILogger<AuthRepository> logger)
         {
             _logger = logger;
         }
 
+        /// <summary>
+        /// Is user authed
+        /// </summary>
+        /// <param name="pid">Users PID</param>
+        /// <returns>Task of bool</returns>
         public Task<bool> IsAuthedRole(string pid) => Task.Run(() => IsAuthedRoleAsync(pid));
 
         private bool IsAuthedRoleAsync(string pid)

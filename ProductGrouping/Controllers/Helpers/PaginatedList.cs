@@ -7,11 +7,29 @@ using System.Threading.Tasks;
 
 namespace ProductGrouping.Controllers.Helpers
 {
+    /// <summary>
+    /// PaginatedList T class
+    /// </summary>
+    /// <typeparam name="T">Type</typeparam>
     public class PaginatedList<T> : List<T>, IPaginatedList
     {
+        /// <summary>
+        /// Current Page index
+        /// </summary>
         public int PageIndex { get; private set; }
+
+        /// <summary>
+        /// Total Pages
+        /// </summary>
         public int TotalPages { get; private set; }
 
+        /// <summary>
+        /// PaginatedList
+        /// </summary>
+        /// <param name="items">Items</param>
+        /// <param name="count">Count</param>
+        /// <param name="pageIndex">PageIndex</param>
+        /// <param name="pageSize">PageSize</param>
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
@@ -20,6 +38,9 @@ namespace ProductGrouping.Controllers.Helpers
             this.AddRange(items);
         }
 
+        /// <summary>
+        /// HasPreviousPage
+        /// </summary>
         public bool HasPreviousPage
         {
             get
@@ -28,6 +49,9 @@ namespace ProductGrouping.Controllers.Helpers
             }
         }
 
+        /// <summary>
+        /// HasNextPage
+        /// </summary>
         public bool HasNextPage
         {
             get
@@ -36,6 +60,13 @@ namespace ProductGrouping.Controllers.Helpers
             }
         }
 
+        /// <summary>
+        /// Create PaginatedList async
+        /// </summary>
+        /// <param name="source">Source data</param>
+        /// <param name="pageIndex">Current page index</param>
+        /// <param name="pageSize">PageSize, number of records per page</param>
+        /// <returns></returns>
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
             var count = await source.CountAsync();

@@ -7,8 +7,15 @@ using System;
 
 namespace ProductGrouping
 {
+    /// <summary>
+    /// Product Grouping program class
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Main function for program start.
+        /// </summary>
+        /// <param name="args">Args</param>
         public static void Main(string[] args)
         {
             // NLog: setup the logger first to catch all errors
@@ -31,6 +38,11 @@ namespace ProductGrouping
             }
         }
 
+        /// <summary>
+        /// Builds web host
+        /// </summary>
+        /// <param name="args">Args</param>
+        /// <returns></returns>
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()

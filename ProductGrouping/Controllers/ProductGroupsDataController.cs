@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ProductGrouping.Controllers
 {
+    /// <summary>
+    /// API controller for Product Grouping to get product group data
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class ProductGroupsDataController : ControllerBase
@@ -16,21 +19,33 @@ namespace ProductGrouping.Controllers
         private readonly ILogger<ProductGroupsDataController> _logger;
         private readonly IProductGroupRepository _productGroupRepository;
 
+        /// <summary>
+        /// Constructor for Product groups data controller
+        /// </summary>
+        /// <param name="logger">Logger dependency injected</param>
+        /// <param name="productGroupRepository">Product Group repository dependency injected</param>
         public ProductGroupsDataController(ILogger<ProductGroupsDataController> logger,
                                            IProductGroupRepository productGroupRepository)
         {
             _logger = logger;
             _productGroupRepository = productGroupRepository;
         }
-
-        // GET: ProductGroupsData
+        
+        /// <summary>
+        /// Get all product groups
+        /// </summary>
+        /// <returns>IEnumerable of Product Group</returns>
         [HttpGet]
         public async Task<IEnumerable<ProductGroup>> GetProductGroups()
         {
             return (await _productGroupRepository.GetMany()).Where(p => !p.ParentId.HasValue);
         }
 
-        // GET: ProductGroupsData/5
+        /// <summary>
+        /// Get individual product group by id
+        /// </summary>
+        /// <param name="id">Product groups id of type guid</param>
+        /// <returns>Product Group</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductGroupById([FromRoute] Guid id)
         {
@@ -49,7 +64,11 @@ namespace ProductGrouping.Controllers
             return Ok(productGroup);
         }
 
-        // GET: ProductGroupsData/GetbyProductReference?productReference=productReference
+        /// <summary>
+        /// Get individual product group by product reference
+        /// </summary>
+        /// <param name="productReference">Product groups reference of type string</param>
+        /// <returns>Product Group</returns>
         [HttpGet(), Route("GetByProductReference")]
         public async Task<IActionResult> GetByProductReference(string productReference)
         {
@@ -68,7 +87,25 @@ namespace ProductGrouping.Controllers
             return Ok(productGroup);
         }
 
-        // GET: ProductGroupsData/WhereAmI?productReference=productReference
+        /// <summary>
+        /// Gets the product group by product reference, if doesnt exist gets parent product group based on Site+Lob/Site/HMRC
+        /// </summary>
+        /// <list type="number">
+        ///     <item>  
+        ///         <term>LOB and Site</term>  
+        ///         <description>Where product reference = lob and its parent = site</description>  
+        ///     </item>  
+        ///     <item>  
+        ///         <term>Site</term>  
+        ///         <description>Where product reference = site</description>  
+        ///     </item>  
+        ///     <item>  
+        ///         <term>HMRC</term>  
+        ///         <description>Where product reference = HMRC</description>  
+        ///     </item>  
+        ///</list>
+        /// <param name="productReference">Product groups reference of type string</param>
+        /// <returns>Product Group</returns>
         [HttpGet(), Route("WhereAmI")]
         public async Task<ProductGroup> WhereAmI(string productReference)
         {
@@ -109,14 +146,22 @@ namespace ProductGrouping.Controllers
             return productGroup; 
         }
 
-        // GET: ProductGroupsData/GetByOwner?productOwner=productOwner
+        /// <summary>
+        /// Get individual product group by product owner
+        /// </summary>
+        /// <param name="productOwner">Product groups owner of type string</param>
+        /// <returns>Product Group</returns>
         [HttpGet(), Route("GetByProductOwner")]
         public async Task<IEnumerable<ProductGroup>> GetProductGroupsByProductOwner(string productOwner)
         {
             return await _productGroupRepository.GetMany(p => p.ProductOwner == productOwner);
         }
 
-        // GET: ProductGroupsData/GetByGroup?group=group
+        /// <summary>
+        /// Get individual product group by product group
+        /// </summary>
+        /// <param name="group">Product groups parent reference of type string</param>
+        /// <returns>Product Group</returns>
         [HttpGet(), Route("GetByGroup")]
         public async Task<IEnumerable<ProductGroup>> GetProductGroupsByGroup(string group)
         {

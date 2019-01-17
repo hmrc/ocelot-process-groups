@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace ProductGrouping.Controllers
 {
+    /// <summary>
+    /// Controller for MVC views to edit product groups
+    /// </summary>
     public class ProductGroupsController : Controller
     {
         private readonly ILogger<ProductGroupsController> _logger;
@@ -19,6 +22,13 @@ namespace ProductGrouping.Controllers
         private readonly IAuthRepository _authRepository;
         private readonly ILegacyFileRepository _legacyFileRepository;
 
+        /// <summary>
+        /// Constructor for Product groups controller
+        /// </summary>
+        /// <param name="logger">Logger dependency injected</param>
+        /// <param name="productGroupRepository">Product Group repository dependency injected</param>
+        /// <param name="authRepository">Auth repository dependency injected</param>
+        /// <param name="legacyFileRepository">Legacy file repository dependency injected</param>
         public ProductGroupsController(ILogger<ProductGroupsController> logger,
                                        IProductGroupRepository productGroupRepository,
                                        IAuthRepository authRepository,
@@ -30,7 +40,13 @@ namespace ProductGrouping.Controllers
             _legacyFileRepository = legacyFileRepository;
         }
 
-        // GET: ProductGroups
+        /// <summary>
+        /// Index view
+        /// </summary>
+        /// <param name="currentFilter">Current search value</param>
+        /// <param name="searchString">New search value</param>
+        /// <param name="page">Current page number being viewed</param>
+        /// <returns>View Paginated list of product groups</returns>
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page)
         {
             Expression<Func<ProductGroup, bool>> where = p => p.Id != null;
@@ -70,7 +86,11 @@ namespace ProductGrouping.Controllers
             }
         }
 
-        // GET: ProductGroups/Details/5
+        /// <summary>
+        /// Details view
+        /// </summary>
+        /// <param name="id">Product Group id</param>
+        /// <returns>Details View</returns>
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -99,7 +119,10 @@ namespace ProductGrouping.Controllers
             }     
         }
 
-        // GET: ProductGroups/Create
+        /// <summary>
+        /// Create View
+        /// </summary>
+        /// <returns>Create View</returns>
         public IActionResult Create()
         {
             try
@@ -116,9 +139,11 @@ namespace ProductGrouping.Controllers
             }
         }
 
-        // POST: ProductGroups/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Post to create a product group
+        /// </summary>
+        /// <param name="productGroup">product group (Id,ProductReference,ProductOwner,ParentId)</param>
+        /// <returns>Redirect to index on sucess</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProductReference,ProductOwner,ParentId")] ProductGroup productGroup)
@@ -156,7 +181,11 @@ namespace ProductGrouping.Controllers
             }
         }
 
-        // GET: ProductGroups/Edit/5
+        /// <summary>
+        /// Edit View
+        /// </summary>
+        /// <param name="id">Product Group id</param>
+        /// <returns>Edit View</returns>
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -185,9 +214,12 @@ namespace ProductGrouping.Controllers
             }
         }
 
-        // POST: ProductGroups/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        ///  Post to edit a product group
+        /// </summary>
+        /// <param name="id">Product Group id</param>
+        /// <param name="productGroup">Product group (Id,ProductReference,ProductOwner,ParentId)</param>
+        /// <returns>Redirect to index on sucess</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,ProductReference,ProductOwner,ParentId")] ProductGroup productGroup)
@@ -254,7 +286,11 @@ namespace ProductGrouping.Controllers
             }
         }
 
-        // GET: ProductGroups/Delete/5
+        /// <summary>
+        /// Delete View
+        /// </summary>
+        /// <param name="id">Product Group id</param>
+        /// <returns>Delete View</returns>
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -281,7 +317,11 @@ namespace ProductGrouping.Controllers
             }
         }
 
-        // POST: ProductGroups/Delete/5
+        /// <summary>
+        /// Post to delete product group
+        /// </summary>
+        /// <param name="id">Product Group id</param>
+        /// <returns>Redirect to index on sucess</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
