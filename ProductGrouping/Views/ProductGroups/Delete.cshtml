@@ -24,8 +24,10 @@
                 <td>
                     @Html.DisplayNameFor(model => model.ProductOwner)
                 </td>
-                <td>
-                    @Html.DisplayFor(model => model.ProductOwner)
+                <td>                    
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#OwnerModalList" data-whatever="@Html.DisplayFor(model => model.ProductOwner)" data-page="Delete">
+                        @Html.DisplayFor(model => model.ProductOwner)
+                    </button>
                 </td>
             </tr>
             <tr>
