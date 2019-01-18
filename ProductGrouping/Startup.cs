@@ -54,8 +54,6 @@ namespace ProductGrouping
 
             services.AddSwaggerGen(c =>
             {
-                //c.SwaggerDoc("v1", new Info { Title = "Product Grouping", Version = "v1" });
-
                 c.SwaggerDoc("v1", new Info
                 {
                     Version = "v1",
@@ -77,6 +75,7 @@ namespace ProductGrouping
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
                 c.IncludeXmlComments(xmlPath);
             });
 
@@ -125,7 +124,7 @@ namespace ProductGrouping
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Product Grouping");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "Product Grouping");
             });
         }
     }

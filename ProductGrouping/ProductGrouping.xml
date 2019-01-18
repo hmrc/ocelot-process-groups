@@ -1,0 +1,554 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProductGrouping</name>
+    </assembly>
+    <members>
+        <member name="T:ProductGrouping.Controllers.Helpers.PaginatedList`1">
+            <summary>
+            PaginatedList T class
+            </summary>
+            <typeparam name="T">Type</typeparam>
+        </member>
+        <member name="P:ProductGrouping.Controllers.Helpers.PaginatedList`1.PageIndex">
+            <summary>
+            Current Page index
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Controllers.Helpers.PaginatedList`1.TotalPages">
+            <summary>
+            Total Pages
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Controllers.Helpers.PaginatedList`1.#ctor(System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Int32)">
+            <summary>
+            PaginatedList
+            </summary>
+            <param name="items">Items</param>
+            <param name="count">Count</param>
+            <param name="pageIndex">PageIndex</param>
+            <param name="pageSize">PageSize</param>
+        </member>
+        <member name="P:ProductGrouping.Controllers.Helpers.PaginatedList`1.HasPreviousPage">
+            <summary>
+            HasPreviousPage
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Controllers.Helpers.PaginatedList`1.HasNextPage">
+            <summary>
+            HasNextPage
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Controllers.Helpers.PaginatedList`1.CreateAsync(System.Linq.IQueryable{`0},System.Int32,System.Int32)">
+            <summary>
+            Create PaginatedList async
+            </summary>
+            <param name="source">Source data</param>
+            <param name="pageIndex">Current page index</param>
+            <param name="pageSize">PageSize, number of records per page</param>
+            <returns></returns>
+        </member>
+        <member name="T:ProductGrouping.Controllers.ProductGroupsController">
+            <summary>
+            Controller for MVC views to edit product groups
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.#ctor(Microsoft.Extensions.Logging.ILogger{ProductGrouping.Controllers.ProductGroupsController},ProductGrouping.Interfaces.IProductGroupRepository,ProductGrouping.Interfaces.IAuthRepository,ProductGrouping.Interfaces.ILegacyFileRepository)">
+            <summary>
+            Constructor for Product groups controller
+            </summary>
+            <param name="logger">Logger dependency injected</param>
+            <param name="productGroupRepository">Product Group repository dependency injected</param>
+            <param name="authRepository">Auth repository dependency injected</param>
+            <param name="legacyFileRepository">Legacy file repository dependency injected</param>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.Index(System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Index view
+            </summary>
+            <param name="currentFilter">Current search value</param>
+            <param name="searchString">New search value</param>
+            <param name="page">Current page number being viewed</param>
+            <returns>View Paginated list of product groups</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.Details(System.Nullable{System.Guid})">
+            <summary>
+            Details view
+            </summary>
+            <param name="id">Product Group id</param>
+            <returns>Details View</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.Create">
+            <summary>
+            Create View
+            </summary>
+            <returns>Create View</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.Create(ProductGrouping.Models.ProductGroup)">
+            <summary>
+            Post to create a product group
+            </summary>
+            <param name="productGroup">product group (Id,ProductReference,ProductOwner,ParentId)</param>
+            <returns>Redirect to index on sucess</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.Edit(System.Nullable{System.Guid})">
+            <summary>
+            Edit View
+            </summary>
+            <param name="id">Product Group id</param>
+            <returns>Edit View</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.Edit(System.Guid,ProductGrouping.Models.ProductGroup)">
+            <summary>
+             Post to edit a product group
+            </summary>
+            <param name="id">Product Group id</param>
+            <param name="productGroup">Product group (Id,ProductReference,ProductOwner,ParentId)</param>
+            <returns>Redirect to index on sucess</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.Delete(System.Nullable{System.Guid})">
+            <summary>
+            Delete View
+            </summary>
+            <param name="id">Product Group id</param>
+            <returns>Delete View</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsController.DeleteConfirmed(System.Guid)">
+            <summary>
+            Post to delete product group
+            </summary>
+            <param name="id">Product Group id</param>
+            <returns>Redirect to index on sucess</returns>
+        </member>
+        <member name="T:ProductGrouping.Controllers.ProductGroupsDataController">
+            <summary>
+            API controller for Product Grouping to get product group data
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsDataController.#ctor(Microsoft.Extensions.Logging.ILogger{ProductGrouping.Controllers.ProductGroupsDataController},ProductGrouping.Interfaces.IProductGroupRepository)">
+            <summary>
+            Constructor for Product groups data controller
+            </summary>
+            <param name="logger">Logger dependency injected</param>
+            <param name="productGroupRepository">Product Group repository dependency injected</param>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsDataController.GetProductGroups">
+            <summary>
+            Get all product groups
+            </summary>
+            <returns>IEnumerable of Product Group</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsDataController.GetProductGroupById(System.Guid)">
+            <summary>
+            Get individual product group by id
+            </summary>
+            <param name="id">Product groups id of type guid</param>
+            <returns>Product Group</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsDataController.GetByProductReference(System.String)">
+            <summary>
+            Get individual product group by product reference
+            </summary>
+            <param name="productReference">Product groups reference of type string</param>
+            <returns>Product Group</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsDataController.WhereAmI(System.String)">
+             <summary>
+             Gets the product group by product reference, if doesnt exist gets parent product group based on Site+Lob/Site/HMRC
+             </summary>
+             <list type="number">
+                 <item>  
+                     <term>LOB and Site</term>  
+                     <description>Where product reference = lob and its parent = site</description>  
+                 </item>  
+                 <item>  
+                     <term>Site</term>  
+                     <description>Where product reference = site</description>  
+                 </item>  
+                 <item>  
+                     <term>HMRC</term>  
+                     <description>Where product reference = HMRC</description>  
+                 </item>  
+            </list>
+             <param name="productReference">Product groups reference of type string</param>
+             <returns>Product Group</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsDataController.GetProductGroupsByProductOwner(System.String)">
+            <summary>
+            Get individual product group by product owner
+            </summary>
+            <param name="productOwner">Product groups owner of type string</param>
+            <returns>Product Group</returns>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ProductGroupsDataController.GetProductGroupsByGroup(System.String)">
+            <summary>
+            Get individual product group by product group
+            </summary>
+            <param name="group">Product groups parent reference of type string</param>
+            <returns>Product Group</returns>
+        </member>
+        <member name="T:ProductGrouping.Controllers.ValidationController">
+            <summary>
+            Validation Controller
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ValidationController.#ctor(Microsoft.Extensions.Logging.ILogger{ProductGrouping.Controllers.ValidationController},ProductGrouping.Interfaces.IProductGroupRepository)">
+            <summary>
+            Vailidation Controller constructor
+            </summary>
+            <param name="logger">Logger dependency injected</param>
+            <param name="productGroupRepository">Product Group repository dependency injected</param>
+        </member>
+        <member name="M:ProductGrouping.Controllers.ValidationController.CheckProductReferenceExist(System.String)">
+            <summary>
+            CheckProductReferenceExists
+            </summary>
+            <param name="productReference">ProductReference</param>
+            <returns>Task IAction result (true/false)</returns>
+        </member>
+        <member name="T:ProductGrouping.Interfaces.IAuthRepository">
+            <summary>
+            Auth Repository Interface
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IAuthRepository.IsAuthedRole(System.String)">
+            <summary>
+            Required IsAuthedRole function
+            </summary>
+            <param name="pid">PID</param>
+            <returns>Task bool</returns>
+        </member>
+        <member name="T:ProductGrouping.Interfaces.ILegacyFileRepository">
+            <summary>
+            Legacy file repository interface
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.ILegacyFileRepository.Publish">
+            <summary>
+            Required Publish function
+            </summary>
+            <returns>Task</returns>
+        </member>
+        <member name="T:ProductGrouping.Interfaces.IPaginatedList">
+            <summary>
+            PaginatedList interface
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Interfaces.IPaginatedList.HasNextPage">
+            <summary>
+            Required bool HasNextPage
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Interfaces.IPaginatedList.HasPreviousPage">
+            <summary>
+            Required bool HasPreviousPage
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Interfaces.IPaginatedList.PageIndex">
+            <summary>
+            Required int PageIndex
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Interfaces.IPaginatedList.TotalPages">
+            <summary>
+            Required int TotalPages
+            </summary>      
+        </member>
+        <member name="T:ProductGrouping.Interfaces.IProductGroupRepository">
+            <summary>
+            Product group repository interface
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.Get(System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.Boolean}})">
+            <summary>
+            Required Get function
+            </summary>
+            <param name="where">Where function</param>
+            <returns>Task of Product Group</returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.GetMany">
+            <summary>
+            Required GetMany function
+            </summary>
+            <returns>Task IEnumerable ProductGroups</returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.GetMany(System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.Boolean}})">
+            <summary>
+            Required GetMany function
+            </summary>
+            <param name="where">Where function</param>
+            <returns>Task IEnumerable ProductGroup</returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.GetMany(System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.Boolean}},System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.String}})">
+            <summary>
+            Required GetMany function
+            </summary>
+            <param name="where">Where function</param>
+            <param name="orderBy">Orderby function</param>
+            <returns></returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.GetSelectList">
+            <summary>
+            Required GetSelectList function
+            </summary>
+            <returns>IEnumerable SelectListItem</returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.Post(ProductGrouping.Models.ProductGroup)">
+            <summary>
+            Requred Post function
+            </summary>
+            <param name="productGroup">ProductGroup</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.Put(ProductGrouping.Models.ProductGroup)">
+            <summary>
+            Required Put function
+            </summary>
+            <param name="productGroup">ProductGroup</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.Delete(ProductGrouping.Models.ProductGroup)">
+            <summary>
+            Required Delete function
+            </summary>
+            <param name="productGroup">Product Group</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:ProductGrouping.Interfaces.IProductGroupRepository.Exists(System.Guid)">
+            <summary>
+            Required Exists function
+            </summary>
+            <param name="id">Id</param>
+            <returns>Task bool</returns>
+        </member>
+        <member name="T:ProductGrouping.Models.Context">
+            <summary>
+            Database context
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Models.Context.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{ProductGrouping.Models.Context})">
+            <summary>
+            Context constructor
+            </summary>
+            <param name="options">Options</param>
+        </member>
+        <member name="P:ProductGrouping.Models.Context.ProductGroups">
+            <summary>
+            Product Groups
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Models.Context.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Runs on creation
+            </summary>
+            <param name="modelBuilder">Model builder</param>
+        </member>
+        <member name="T:ProductGrouping.Models.ErrorViewModel">
+            <summary>
+            Error view model
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ErrorViewModel.RequestId">
+            <summary>
+            Request id
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ErrorViewModel.ShowRequestId">
+            <summary>
+            Show request Id
+            </summary>
+        </member>
+        <member name="T:ProductGrouping.Models.ProductGroup">
+            <summary>
+            Product Group Model
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ProductGroup.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ProductGroup.ProductReference">
+            <summary>
+            Product Reference
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ProductGroup.ProductOwner">
+            <summary>
+            Product owner
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ProductGroup.ParentId">
+            <summary>
+            Parent id
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ProductGroup.Parent">
+            <summary>
+            Parent Product group
+            </summary>
+        </member>
+        <member name="P:ProductGrouping.Models.ProductGroup.Children">
+            <summary>
+            ICollection of product group childern
+            </summary>
+        </member>
+        <member name="T:ProductGrouping.Program">
+            <summary>
+            Product Grouping program class
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Program.Main(System.String[])">
+            <summary>
+            Main function for program start.
+            </summary>
+            <param name="args">Args</param>
+        </member>
+        <member name="M:ProductGrouping.Program.BuildWebHost(System.String[])">
+            <summary>
+            Builds web host
+            </summary>
+            <param name="args">Args</param>
+            <returns></returns>
+        </member>
+        <member name="T:ProductGrouping.Repositories.AuthRepository">
+            <summary>
+            Auth repository
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Repositories.AuthRepository.#ctor(Microsoft.Extensions.Logging.ILogger{ProductGrouping.Repositories.AuthRepository})">
+            <summary>
+            Auth repository constructor
+            </summary>
+            <param name="logger">Logger dependency injected</param>
+        </member>
+        <member name="M:ProductGrouping.Repositories.AuthRepository.IsAuthedRole(System.String)">
+            <summary>
+            Is user authed
+            </summary>
+            <param name="pid">Users PID</param>
+            <returns>Task of bool</returns>
+        </member>
+        <member name="T:ProductGrouping.Repositories.LegacyFileRepository">
+            <summary>
+            Legacy file repository to create xml file containing product groups
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Repositories.LegacyFileRepository.#ctor(Microsoft.Extensions.Logging.ILogger{ProductGrouping.Repositories.LegacyFileRepository},ProductGrouping.Interfaces.IProductGroupRepository)">
+            <summary>
+            Constructor for legacy file repository
+            </summary>
+            <param name="logger">Logger dependency injected</param>
+            <param name="productGroupRepository">Product group repository dependency injected</param>
+        </member>
+        <member name="M:ProductGrouping.Repositories.LegacyFileRepository.Publish">
+            <summary>
+            Publish product groups in legacy format
+            </summary>
+            <returns>Task</returns>
+        </member>
+        <member name="T:ProductGrouping.Repositories.ProductGroupRepository">
+            <summary>
+            Product group repository, handles all database queries
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.#ctor(ProductGrouping.Models.Context,Microsoft.Extensions.Logging.ILogger{ProductGrouping.Repositories.ProductGroupRepository})">
+            <summary>
+            Constructor for Product groups Repository
+            </summary>
+            <param name="context">Context dependency injected</param>
+            <param name="logger">Logger dependency injected</param>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.Get(System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.Boolean}})">
+            <summary>
+            Get individual product group
+            </summary>
+            <param name="where">Where function</param>
+            <returns>Task ProductGroup</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.GetMany">
+            <summary>
+            Get many product groups
+            </summary>
+            <returns>Task IEnumerable ProductGroup</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.GetMany(System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.Boolean}})">
+            <summary>
+            Get many product groups
+            </summary>
+            <param name="where">Where function</param>
+            <returns>Task IEnumerable ProductGroup</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.GetMany(System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.Boolean}},System.Linq.Expressions.Expression{System.Func{ProductGrouping.Models.ProductGroup,System.String}})">
+            <summary>
+            Get many product groups
+            </summary>
+            <param name="where">Where function</param>
+            <param name="orderBy">Order by function</param>
+            <returns>IQueryable ProductGroup</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.GetSelectList">
+            <summary>
+            Creates select list
+            </summary>
+            <returns>IEnumerable SelectListItem of ProductGroup</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.Post(ProductGrouping.Models.ProductGroup)">
+            <summary>
+            Create product group
+            </summary>
+            <param name="productGroup">Product Group</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.Put(ProductGrouping.Models.ProductGroup)">
+            <summary>
+            Update product group
+            </summary>
+            <param name="productGroup">Product Group</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.Delete(ProductGrouping.Models.ProductGroup)">
+            <summary>
+            Delete product group
+            </summary>
+            <param name="productGroup">Product Group</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:ProductGrouping.Repositories.ProductGroupRepository.Exists(System.Guid)">
+            <summary>
+            Does product group exist
+            </summary>
+            <param name="id">Guid product group id</param>
+            <returns>bool</returns>
+        </member>
+        <member name="T:ProductGrouping.Startup">
+            <summary>
+            Project startup class
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Startup contstructor
+            </summary>
+            <param name="configuration">Startup configuration</param>
+        </member>
+        <member name="P:ProductGrouping.Startup.Configuration">
+            <summary>
+            IConfiguration value
+            </summary>
+        </member>
+        <member name="M:ProductGrouping.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Configure project services. This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services">Services</param>
+        </member>
+        <member name="M:ProductGrouping.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app">Application Builder</param>
+            <param name="env">Environment</param>
+        </member>
+    </members>
+</doc>
